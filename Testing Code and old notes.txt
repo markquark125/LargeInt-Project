@@ -1,0 +1,236 @@
+*	_________________________NOTES__________________________________*/
+/*---> 7 Dec 2022: Need to revise. Working on addition implementation.*/
+/* Verbose: Need to create helper functions just for iterator use	*/
+/* otherwise I might not be able to pass certain parameters as const*/
+/*---> 8 Dec 2022: Will save large ints are abs values and use a 	*/
+/* negFlag to add. Addition is associative (2+3 == 3+2) but 	  	*/
+/* subtraction is not. Will subtract larger value from smaller and	*/
+/* adjust for negative value nedded ** Worked on subtraction func**	*/
+/*---> 16 Dec 2022: Looks like i figure the addition operaton. Need */
+/* to work on the subtraction operation. 							*/
+/* P.S. Adding/Subtracing two abs values which are negations of     */
+/* each other will print two zeros.									*/
+/*---> 17 Dec 2022: Overloaded >. IN-PROGRESS working on < operator.*/
+/*---> 17 Dec 2022: Overloaded <. Figured out you can use the >     */
+/* operator that will call isLarger; iterate through each list. If	*/
+/* both values are equal abs values, the iterators will be at 		*/
+/* firstNode->prev already, which is NULL. Check flags and done.    */
+/* Else, just < will return negation of bool >. Check comments.		*/
+/* ---> 17 Dec 2022: Overloaded <= and >= operators. Similar to	    */
+/* to < and > overloaded but just a slight change on if statement.	*/
+/* ---> 17 Dec 2022: Overload * operator in progess. Left notes. TBC*/
+
+// CODE
+/* COMMENTED OUT TO TEST OVERLOADED - operator
+
+	// ----------------------------------------------------------------
+	// TEST FOR ADDITION
+	// ----------------------------------------------------------------
+
+	LargeInt<int> bigBig; // hold sum, difference of two LargeInts
+
+	//TEST: ADDING TWO POSITVE NUMBERS
+	LargeInt<int> bigOne(222222);
+
+	bigOne.printLargeInt();
+
+	cout << "\n\n";
+
+	LargeInt<int> bigTwo(11111);
+
+	bigTwo.printLargeInt();
+
+	cout << "\n\n";
+
+	bigBig = bigOne + bigTwo; // add two positive LargeInts
+
+	bigBig.printLargeInt(); // Prints as is, which is backwards.
+
+	cout << "\n\n**\t**\t**\t**\t**\n\n"; // BREAK LINE
+
+	// TEST: ADDING TWO NEGATIVE INTEGERS
+
+	LargeInt<int> bigNegOne(-10);
+
+	bigNegOne.printLargeInt();
+
+	cout << "\n\n";
+
+	LargeInt<int> bigNegTwo(-10);
+
+	bigNegTwo.printLargeInt();
+
+	cout << "\n\n";
+
+	bigBig = bigNegOne + bigNegTwo; // add two negative integers
+
+	bigBig.printLargeInt(); // Prints as is, which is backwards.
+
+	cout << "\n\n**\t**\t**\t**\t**\n\n"; // BREAK LINE
+
+	// TEST: ADDING TWO EQUAL BUT DIFFER SIGN INTEGERS
+	LargeInt<int> bigNegSame(-10);
+
+	bigNegSame.printLargeInt();
+
+	cout << "\n\n";
+
+	LargeInt<int> bigPosSame(10);
+
+	bigPosSame.printLargeInt();
+
+	cout << "\n\n";
+
+	bigBig = bigNegSame + bigPosSame; // adding two negations of the same LargeInts
+
+	bigBig.printLargeInt(); // Prints as is, which is backwards.
+
+	cout << "\n\nEqual test: " << bigNegSame.equalNums(bigPosSame);
+	cout << "\nLarger Test: " << bigNegSame.isLarger(bigPosSame);
+
+	cout << "\n\n**\t**\t**\t**\t**\n\n"; // BREAK LINE
+
+	// TEST: ADDING TWO DIFFER SIGN AND VALUE INTEGERS
+	LargeInt<int> bigNegDiff(-11);
+
+	bigNegDiff.printLargeInt();
+
+	cout << "\n\n";
+
+	LargeInt<int> bigPosDiff(10);
+
+	bigPosDiff.printLargeInt();
+
+	cout << "\n\n";
+
+	bigBig = bigNegDiff + bigPosDiff; // adding two + and - LargeInts
+
+	bigBig.printLargeInt(); // Prints as is, which is backwards.
+
+	cout << "\n\nEqual test: " << bigNegDiff.equalNums(bigPosDiff);
+	cout << "\nLarger Test: " << bigNegDiff.isLarger(bigPosDiff);
+
+	cout << "\n\n**\t**\t**\t**\t**\n\n"; // BREAK LINE
+
+	// TEST: ADDING TWO DIFFER SIGN AND VALUE INTEGERS
+	LargeInt<int> bigNegDiff2(11);
+
+	bigNegDiff2.printLargeInt();
+
+	cout << "\n\n";
+
+	LargeInt<int> bigPosDiff2(-10);
+
+	bigPosDiff2.printLargeInt();
+
+	cout << "\n\n";
+
+	bigBig = bigNegDiff2 + bigPosDiff2; // adding two + and - LargeInts
+
+	bigBig.printLargeInt(); // Prints as is, which is backwards.
+
+	cout << "\n\nEqual test: " << bigNegDiff.equalNums(bigPosDiff);
+	cout << "\nLarger Test: " << bigNegDiff.isLarger(bigPosDiff);
+
+	cout << "\n\n**\t**\t**\t**\t**\n\n"; // BREAK LINE
+	*/
+
+	// ----------------------------------------------------------------
+	// TEST FOR SUBTRACTING.
+	// ----------------------------------------------------------------
+
+	/*
+	LargeInt<int> bigBig2; // hold difference of two LargeInts
+
+	// TEST: SUBTRACTING TWO NEGATIVE NUMBERS
+	LargeInt<int> bigSub1(-100);
+
+	bigSub1.printLargeInt();
+
+	cout << "\n\n";
+
+	LargeInt<int> bigSub2(-100);
+
+	bigSub2.printLargeInt();
+
+	cout << "\n\n";
+
+	bigBig2 = bigSub1 - bigSub2; // subtract two negative LargeInts
+
+	bigBig2.printLargeInt(); // Prints as is, which is backwards.
+
+	cout << "\n\n**\t**\t**\t**\t**\n\n"; // BREAK LINE
+
+	// TEST: SUBTRACTING TWO POSITVE NUMBERS
+	LargeInt<int> bigSub3(10);
+
+	bigSub3.printLargeInt();
+
+	cout << "\n\n";
+
+	LargeInt<int> bigSub4(10);
+
+	bigSub4.printLargeInt();
+
+	cout << "\n\n";
+
+	bigBig2 = bigSub3 - bigSub4; // subtract two positive LargeInts
+
+	bigBig2.printLargeInt(); // Prints as is, which is backwards.
+
+	cout << "\n\n**\t**\t**\t**\t**\n\n"; // BREAK LINE
+	*/
+
+	LargeInt<int> bigBig2; // hold difference of two LargeInts
+
+	// TEST: SUBTRACTING EQUAL VALUES WITH OPPOSITE VALUES
+	LargeInt<int> bigSub1(-11);
+
+	bigSub1.printLargeInt();
+
+	cout << "\n\n";
+
+	LargeInt<int> bigSub2(10);
+
+	bigSub2.printLargeInt();
+
+	cout << "\n\n";
+
+	bigBig2 = bigSub1 - bigSub2; // subtract two negative LargeInts
+
+	bigBig2.printLargeInt(); // Prints as is, which is backwards.
+
+	cout << "\n\n**\t**\t**\t**\t**\n\n"; // BREAK LINE
+
+	// TEST: SUBTRACTING EQUAL VALUES WITH OPPOSITE VALUES
+	LargeInt<int> bigSub3(101);
+
+	bigSub3.printLargeInt();
+
+	cout << "\n\n";
+
+	LargeInt<int> bigSub4(101);
+
+	bigSub4.printLargeInt();
+
+	cout << "\n\n";
+
+	bigBig2 = bigSub3 - bigSub4; // subtract two positive LargeInts
+
+	bigBig2.printLargeInt(); // Prints as is, which is backwards.
+
+	cout << "\nBOOL TEST: " << (bigSub3 == bigSub4);
+	cout << "\nGREATER-THAN TEST: " << (bigSub4 >= bigSub3);
+	cout << "\nGREATER-THAN TEST: " << (bigSub3 >= bigSub4);
+	cout << "\nLESS-THAN-EQUAL TEST: " << (bigSub3 <= bigSub4);
+	cout << "\nLESS-THAN-EQUAL TEST: " << (bigSub4 <= bigSub3);
+
+	cout << "\n\n**\t**\t**\t**\t**\n\n"; // BREAK LINE
+
+	LargeInt<int> LargeZero(0);
+
+	bigBig2 = (bigSub3 * LargeZero);
+
+	bigBig2.printLargeInt();
+
+	cout << "\n\n**\t**\t**\t**\t**\n\n"; // BREAK LINE
