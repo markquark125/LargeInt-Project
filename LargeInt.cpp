@@ -8,15 +8,16 @@
 
 #include "LargeInt.h"
 
-template <class T>
-LargeInt<T>::LargeInt(T num)
+// ******************** Fill the list functions************************** //
+
+LargeInt::LargeInt(int num)
 {
     // Call function to fill LargeInt's list
+    negFlag = false;
     fillTheList(num);
 }
 
-template <class T>
-void LargeInt<T>::fillTheList(T num)
+void LargeInt::fillTheList(int num)
 {
     // Case 0: Just a single digit 0;
     if (num == 0)
@@ -43,23 +44,61 @@ void LargeInt<T>::fillTheList(T num)
     }
 }
 
+void LargeInt::fillTheList(const string &num)
+{
+    // Make sure list is empty before use.
+    if (!(numberAsList.isEmptyList()))
+        numberAsList.destroy();
+
+    long size = num.length(); // Hold string length
+    int i = 0;                // To iterate
+
+    // Fill linked list with string integer, digit by digit.
+    if (0 < size)
+    {
+        // Check if negative and increment i
+        if (num[0] == '-')
+        {
+            this->negFlag = true;
+            i = 1;
+        }
+
+        while (i < size)
+        {
+            assert(isdigit(num[i]));
+
+            numberAsList.insertBack(num[i]);
+            i++;
+        }
+    }
+}
+
+// Fill list using a string
+void LargeInt::operator=(const string &num)
+{
+    fillTheList(num);
+}
+
+// Fill list using a integer
+void LargeInt::operator=(const int &num)
+{
+    fillTheList(num);
+}
+
 /**************** Overloaded operators ***********************************/
-template <class T>
-const LargeInt<T> &LargeInt<T>::operator=(const LargeInt<T> &otherLarge)
+const LargeInt &LargeInt::operator=(const LargeInt &otherLarge)
 {
     this->negFlag = otherLarge.negFlag;
     this->numberAsList = otherLarge.numberAsList;
     return *this;
 }
 
-template <class T>
-bool LargeInt<T>::operator==(LargeInt<T> &otherLarge)
+bool LargeInt::operator==(LargeInt &otherLarge)
 {
     return this->equalNums(otherLarge);
 }
 
-template <class T>
-bool LargeInt<T>::operator>(LargeInt<T> &otherLarge)
+bool LargeInt::operator>(LargeInt &otherLarge)
 {
     // In the case that both numbers are equal absolute values
     if (this->equalNums(otherLarge))
@@ -115,8 +154,7 @@ bool LargeInt<T>::operator>(LargeInt<T> &otherLarge)
     }
 }
 
-template <class T>
-bool LargeInt<T>::operator<(LargeInt<T> &otherLarge)
+bool LargeInt::operator<(LargeInt &otherLarge)
 {
     // Call isLarger function. Will return negation of < function,
     // i.e. (10 < 1) == !(10 > 1),  (-10 < 1) == !(-10 > 1)
@@ -135,8 +173,7 @@ bool LargeInt<T>::operator<(LargeInt<T> &otherLarge)
         return !temp;
 }
 
-template <class T>
-bool LargeInt<T>::operator>=(LargeInt &otherLarge)
+bool LargeInt::operator>=(LargeInt &otherLarge)
 {
     // Similar to > sign but just need to check for equal abs value and signs
 
@@ -153,8 +190,7 @@ bool LargeInt<T>::operator>=(LargeInt &otherLarge)
         return temp;
 }
 
-template <class T>
-bool LargeInt<T>::operator<=(LargeInt &otherLarge)
+bool LargeInt::operator<=(LargeInt &otherLarge)
 {
     // Similar to < sign but just need to check for equal abs value and signs
 
@@ -171,10 +207,9 @@ bool LargeInt<T>::operator<=(LargeInt &otherLarge)
         return !temp;
 }
 
-template <class T>
-LargeInt<T> LargeInt<T>::operator+(LargeInt<T> &otherLarge)
+LargeInt LargeInt::operator+(LargeInt &otherLarge)
 {
-    LargeInt<T> temp;
+    LargeInt temp;
 
     // Case 1: Check if both numbers are negative. Sum is negative.
     if (this->negFlag == true && otherLarge.negFlag == true)
@@ -229,10 +264,9 @@ LargeInt<T> LargeInt<T>::operator+(LargeInt<T> &otherLarge)
 }
 
 // NEEDS REVISION
-template <class T>
-LargeInt<T> LargeInt<T>::operator-(LargeInt<T> &otherLarge)
+LargeInt LargeInt::operator-(LargeInt &otherLarge)
 {
-    LargeInt<T> temp;
+    LargeInt temp;
 
     // 16 Dec 2022: Consider easiest cases first. First, check for equal valued
     // LargeInts. Then check other cases
@@ -351,13 +385,12 @@ LargeInt<T> LargeInt<T>::operator*(LargeInt<T> &otherLarge)
 /**********************END Overloaded operators*******************************/
 
 /********************** Operator functions ***********************/
-template <class T>
-doublyLinkedList<T> LargeInt<T>::add(LargeInt<T> &thisLarge, LargeInt<T> &otherLarge)
+doublyLinkedList<int> LargeInt::add(LargeInt &thisLarge, LargeInt &otherLarge)
 {
     /* ISSUE: (6 Dec 2022) Need to revise to avoid verbosity.                   */
     /* Not sure; will just have to call functions to iterate and return info;   */
     /* consider using const to avoid changing of either LargeInt. */
-    doublyLinkedList<T> temp;
+    doublyLinkedList<int> temp;
     bool carry = false;
 
     // Set both iterator-of-list to first node for each LargeInt's list
@@ -369,7 +402,7 @@ doublyLinkedList<T> LargeInt<T>::add(LargeInt<T> &thisLarge, LargeInt<T> &otherL
     while (!(otherLarge.numberAsList.isIterNull()) ||
            !(thisLarge.numberAsList.isIterNull()))
     {
-        T total = 0; // Will hold sum for pair of digits
+        int total = 0; // Will hold sum for pair of digits
 
         if (carry) // Check for carry-over int
             total += 1;
@@ -414,8 +447,7 @@ doublyLinkedList<T> LargeInt<T>::add(LargeInt<T> &thisLarge, LargeInt<T> &otherL
     return temp;
 }
 
-template <class T>
-doublyLinkedList<T> LargeInt<T>::sub(LargeInt<T> &minuLarge, LargeInt<T> &subtraLarge)
+doublyLinkedList<int> LargeInt::sub(LargeInt &minuLarge, LargeInt &subtraLarge)
 {
     /******************************************************************************/
     // About subtraction, because order matters: Difference = Minuend - Subtrahend;
@@ -425,9 +457,9 @@ doublyLinkedList<T> LargeInt<T>::sub(LargeInt<T> &minuLarge, LargeInt<T> &subtra
     // subtrahend. NOTE: parameters are absolute values.
     /*****************************************************************************/
 
-    doublyLinkedList<T> temp; // List containing computed diffenence
-    bool borrow = false;      // To store if number was borrowed.
-    T difference;             // To store the difference
+    doublyLinkedList temp; // List containing computed diffenence
+    bool borrow = false;   // To store if number was borrowed.
+    int difference;        // To store the difference
 
     // Set both iterator-of-list to first node for each LargeInt object's list
     minuLarge.numberAsList.setIterFront();
@@ -530,22 +562,42 @@ while (!multiplier.numberAsList.isIterNull())
 }
 */
 /*************************** END Operators Functions *************************/
-
-template <class T>
-void LargeInt<T>::printLargeInt() const
+ostream &operator<<(ostream &out, LargeInt &largeInt)
 {
-    if (negFlag)
-        cout << " - ";
+    largeInt.numberAsList.setIterBack(); // Set to back of list
 
-    numberAsList.printList();
+    // Check for negFlag
+    if (largeInt.negFlag)
+    {
+        out << '-';
+    }
+
+    while (!largeInt.numberAsList.isIterNull())
+    {
+        out << largeInt.numberAsList.iterInfo();
+        largeInt.numberAsList.iterateBack();
+    }
+    return out;
+}
+
+istream &operator>>(istream &in, LargeInt &largeInt)
+{
+    // String to hold the integer
+    string num;
+
+    // Input stream object reads and stores in num.
+    in >> num;
+
+    largeInt = num;
+
+    return in;
 }
 
 /****************************** HELPER FUNCTIONS ********************************/
 /****************** functions used by overloaded operators *********************/
 // Date: 12/16/22
 
-template <class T>
-bool LargeInt<T>::equalNums(LargeInt<T> &otherLarge)
+bool LargeInt::equalNums(LargeInt &otherLarge)
 {
     // Case 0: Are both LargeInts equal length?
     if (this->numberAsList.length() != otherLarge.numberAsList.length())
@@ -578,8 +630,7 @@ bool LargeInt<T>::equalNums(LargeInt<T> &otherLarge)
     }
 }
 
-template <class T>
-bool LargeInt<T>::isLarger(LargeInt<T> &otherLarge)
+bool LargeInt::isLarger(LargeInt &otherLarge)
 {
     /**********************************************************************/
     // This function compares the *absolute values* of two LargeInts.

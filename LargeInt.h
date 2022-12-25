@@ -13,44 +13,48 @@
 #ifndef LARGEINT_H
 #define LARGEINT_H
 
-template <class T>
-class LargeInt : protected doublyLinkedList<T>
+class LargeInt : protected doublyLinkedList<int>
 {
 private:
-    doublyLinkedList<T> numberAsList; // to store number as a doubly-linked list.
-    bool negFlag;                     // Flag if number is negative
+    doublyLinkedList numberAsList; // to store number as a doubly-linked list.
+    bool negFlag;                  // Flag if number is negative
 
-    void fillTheList(T num); // Function to fill the list.
+    void fillTheList(int num);           // Function to fill the list with int data type
+    void fillTheList(const string &num); // Fill with string data type
+    void operator=(const string &num);   // Overload = for strings
+    void operator=(const int &num);      // Overload = for ints
 
-    // Function to add LargeInt objects. Called by other functions.
-    doublyLinkedList<T> add(LargeInt<T> &thisLarge, LargeInt<T> &otherLarge);
-    doublyLinkedList<T> sub(LargeInt<T> &thisLarge, LargeInt<T> &otherLarge);
-
-    // doublyLinkedList<T> mult(LargeInt<T> &thisLarge, LargeInt<T> &otherLarge);
+    // Arithmetic functions for LargeInt objects. Called by overloaded operators.
+    doublyLinkedList<int> add(LargeInt &thisLarge, LargeInt &otherLarge);
+    doublyLinkedList<int> sub(LargeInt &thisLarge, LargeInt &otherLarge);
+    // doublyLinkedList<int> mult(LargeInt<int> &thisLarge, LargeInt<int> &otherLarge);
 
 protected:
     /*********************** Helper functions. **********************/
     // Function to check if the absolute values of two ints are equal
-    bool equalNums(LargeInt<T> &otherLarge);
+    bool equalNums(LargeInt &otherLarge);
     // Checks if absolute value of this LargeInt is larger
-    bool isLarger(LargeInt<T> &otherLarge);
+    bool isLarger(LargeInt &otherLarge);
 
 public:
-    LargeInt(T num = 0); // Constructor
+    LargeInt(int num = 0); // Constructor
 
     /********** Overloaded operators, will call other functions******/
-    LargeInt<T> operator+(LargeInt &);
-    LargeInt<T> operator-(LargeInt &);
-    // LargeInt<T> operator*(LargeInt &); // IN PROGRESS.
+    LargeInt operator+(LargeInt &);
+    LargeInt operator-(LargeInt &);
+    // LargeInt<int> operator*(LargeInt &); // IN PROGRESS.
     bool operator==(LargeInt &);
     bool operator>(LargeInt &);
     bool operator<(LargeInt &);
     bool operator>=(LargeInt &);
     bool operator<=(LargeInt &);
-    const LargeInt<T> &operator=(const LargeInt<T> &);
+    const LargeInt &operator=(const LargeInt &);
 
-    // Function to print LargeInt list. For testing/debugging
-    void printLargeInt() const; // Print function to check list.
+    /***************** Function to print LargeInt list.  ****************/
+    // Overload output operator to output data of this object.
+    friend ostream &operator<<(ostream &out, LargeInt &largeInt);
+    // Overload output operator to get input integer, store in LargeInt object
+    friend istream &operator>>(istream &in, LargeInt &LargeInt);
 };
 
 #endif

@@ -33,7 +33,6 @@ public:
 	void printList() const; // Function just to print list. To be used by LargeInt class
 							// for testing .
 
-	// public:
 	//  Default constructor.
 	//  Postcondition: first = NULL, last = NULL; count = 0;
 	doublyLinkedList();

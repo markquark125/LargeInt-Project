@@ -13,13 +13,13 @@
 
 int main()
 {
-	LargeInt<int> LargeValue; // hold sum, difference of two LargeInts
+	LargeInt LargeValue; // hold sum, difference of two LargeInts
 
 	// TEST: ADDING TWO POSITVE NUMBERS
-	LargeInt<int> LargeInt1(999);
-	LargeInt<int> LargeInt2(1);
+	LargeInt LargeInt1(999);
+	LargeInt LargeInt2(1);
 
-	LargeInt1.printLargeInt();
+	/* LargeInt1.printLargeInt();
 	cout << " + ";
 	LargeInt2.printLargeInt();
 	cout << " = ";
@@ -68,6 +68,12 @@ int main()
 	LargeInt2.printLargeInt();
 	cout << " is " << (LargeInt1 == LargeInt2);
 
-	cout << "\n\nEND\n\n";
+	cout << "\n\nEND\n\n"; */
+
+	cout << LargeInt1 << endl;
+	cout << LargeInt2 << endl;
+	cin >> LargeInt2;
+	cout << LargeInt2 << endl;
+
 	return 0;
 }
